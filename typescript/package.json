@@ -1,0 +1,12 @@
+{
+  "name": "advent-of-code-2023",
+  "module": "advent-of-code-2023",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
