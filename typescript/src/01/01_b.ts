@@ -1,36 +1,30 @@
+import assert from "assert";
+
 async function run() {
-  // const input = await Bun.file(new URL(`${import.meta.url}/../input.txt`)).text();
-  const input = await Bun.file(new URL(`${import.meta.url}/../input_test.txt`)).text();
+  const input = await Bun.file(
+    new URL(`${import.meta.url}/../input.txt`)
+  ).text();
+
   const lines = input.split("\n");
 
-  const cards = lines.map((line, i) =>
-    line
-      .split(":")[1]
-      .split("|")
-      .map((n) => n.trim().split(" "))
+  const [left, right] = lines.reduce<[number[], number[]]>(
+    (acc, line) => {
+      const [left, right] = line.split("   ").map(Number);
+      acc[0].push(left);
+      acc[1].push(right);
+      return acc;
+    },
+    [[], []]
   );
 
-  let sum = 0;
-  for (const [winning, myNumbers] of cards) {
-    console.log(myNumbers);
-    
-    const match = myNumbers.filter((n) => n.length > 0 && winning.includes(n));
-    // console.log(match)
+  left.sort((a, b) => a - b);
+  right.sort((a, b) => a - b);
 
-    /* let points = 0;
-    for (const n of myNumbers) {
-      if (n === "") continue;
-      if (winning.includes(n)) {
-        if (points === 0) {
-          points = 1;
-        } else {
-          points *= 2;
-        }
-      }
-    } */
+  const sum = left
+    .map((l, i) => l * right.filter((r) => r === l).length)
+    .reduce((total, distance) => total + distance);
 
-    // sum += points;
-  }
+  assert(sum === 25358365);
 }
 
 run();
