@@ -1,0 +1,2 @@
+name = "advent_of_code_2024"
+dependencies = { simplifile = ">= 2.2.0 and < 3.0.0" , argv = ">= 1.0.2 and < 2.0.0" , gleam_stdlib = ">= 0.45.0 and < 1.0.0" }

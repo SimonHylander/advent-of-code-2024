@@ -3,3 +3,4 @@ typescript/node_modules
 rust/.idea
 rust/target
 kotlin/.idea
+gleam/build
