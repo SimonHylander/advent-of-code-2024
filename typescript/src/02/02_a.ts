@@ -1,43 +1,24 @@
 import assert from "assert";
 
 async function run() {
-  const input = await Bun.file(new URL(`${import.meta.url}/../input.txt`)).text();
+  const input = await Bun.file(
+    new URL(`${import.meta.url}/../input.txt`)
+  ).text();
   const lines = input.split("\n");
 
-  const groups = lines.map((line) => {
-    const content = line.split(":", 2)[1];
-    return content.split(";").map((s) => s.trim().split(", "));
-  });
+  const lineLevels = lines.map((line) => line.trim().split(" ").map(Number));
+  const safeCount = lineLevels.filter((levels) => isSafe(levels)).length;
 
-  const sum = groups.reduce((acc, group, i) => {
-    const gameIsPossible = group.every((set) =>
-      set.every((cube) => {
-        const parsed = parseCubes(cube);
-        return (
-          (parsed.color === "red" && parsed.amount <= 12) ||
-          (parsed.color === "green" && parsed.amount <= 13) ||
-          (parsed.color === "blue" && parsed.amount <= 14)
-        );
-      })
+  function isSafe(levels: number[]) {
+    const diffs = levels.map((l, i) => l - levels[i - 1]);
+    diffs.shift();
+    return (
+      diffs.every((d) => d >= -3 && d < 0) ||
+      diffs.every((d) => d <= 3 && d > 0)
     );
-
-    if (gameIsPossible) {
-      return acc + (i + 1);
-    }
-
-    return acc;
-  }, 0);
-
-  assert(sum == 2683);
-
-  function parseCubes(cube: string) {
-    const [amount, color] = cube.trim().split(" ");
-
-    return {
-      color,
-      amount: +amount,
-    };
   }
+
+  assert(safeCount == 585);
 }
 
 run();

@@ -1,25 +1,39 @@
 import assert from "assert";
 
 async function run() {
-  const input = await Bun.file(new URL(`${import.meta.url}/../input.txt`)).text();
+  const input = await Bun.file(
+    new URL(`${import.meta.url}/../input.txt`)
+  ).text();
+
   const lines = input.split("\n");
+  const lineLevels = lines.map((line) => line.trim().split(" ").map(Number));
 
-  const groups = lines.map((line) => {
-    const content = line.split(":", 2)[1];
-    return content.split(";").map((s) => s.trim().split(", "));
-  });
+  let safeCount = lineLevels.filter((levels) => {
+    if (isSafe(levels)) {
+      return true;
+    }
 
-  const sum = groups.reduce((acc, group) => {
-    const flat = group.flatMap(set => set)
-    const maxRed = Math.max(...flat.filter(cube => cube.includes("red")).map(c => parseInt(c)))
-    const maxGreen = Math.max(...flat.filter(cube => cube.includes("green")).map(c => parseInt(c)))
-    const maxBlue = Math.max(...flat.filter(cube => cube.includes("blue")).map(c => parseInt(c)))
-    const power = maxRed * maxGreen * maxBlue
+    for (let i = 0; i < levels.length; i++) {
+      const withoutCurrent = levels.toSpliced(i, 1);
 
-    return acc + power
-  }, 0)
+      if (isSafe(withoutCurrent)) {
+        return true;
+      }
+    }
 
-  assert(sum === 49710)
+    return false;
+  }).length;
+
+  assert(safeCount === 626);
+
+  function isSafe(levels: number[]) {
+    const diffs = levels.map((l, i) => l - levels[i - 1]);
+    diffs.shift();
+    return (
+      diffs.every((d) => d >= -3 && d < 0) ||
+      diffs.every((d) => d <= 3 && d > 0)
+    );
+  }
 }
 
 run();
