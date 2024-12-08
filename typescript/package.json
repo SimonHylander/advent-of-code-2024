@@ -1,8 +1,11 @@
 {
-  "name": "advent-of-code-2023",
-  "module": "advent-of-code-2023",
+  "name": "advent-of-code-2024",
+  "module": "advent-of-code-2024",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "day": "bun src/advent-of-code.ts",
+    "fetch": "bun src/fetcher.ts"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },

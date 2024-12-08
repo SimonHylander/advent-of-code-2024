@@ -1,6 +1,7 @@
 import assert from "assert";
 
-async function run() {
+export async function day4() {
+  console.log(process.argv);
   const input = await Bun.file(new URL(`${import.meta.url}/../input.txt`)).text();
 
   const example = `MMMSXXMASM
@@ -18,6 +19,15 @@ MXMXAXMASX`;
   const grid = lines.map((line) => line.split(""));
 
   let sum = 0;
+
+  const s = grid.reduce((sum, line, i) => {
+    return (
+      sum +
+      line.reduce((t, _, x) => {
+        return t;
+      })
+    );
+  }, 0);
 
   for (let i = 0; i < grid.length; i++) {
     const reversedLine = grid[i].slice().reverse();
